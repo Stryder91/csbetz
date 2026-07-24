@@ -28,6 +28,13 @@ export const USDC_ABI = [
   },
   {
     type: 'function',
+    name: 'balanceOf',
+    inputs: [{ name: 'account', type: 'address' }],
+    outputs: [{ type: 'uint256' }],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'decimals',
     inputs: [],
     outputs: [{ type: 'uint8' }],

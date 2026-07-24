@@ -2,9 +2,9 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useAccount } from 'wagmi'
+import { useEffect } from 'react'
 import type { Match } from '@/types/match'
 import { useApproveAndBet } from '@/hooks/useApproveAndBet'
-
 
 const betSchema = z.object({
   teamId: z.string().min(1, 'Sélectionne une équipe'),
@@ -16,7 +16,7 @@ const betSchema = z.object({
 
 type BetFormValues = z.infer<typeof betSchema>
 
-export function BetPanel({ match }: { match: Match }) {
+export function BetPanel({ match, onBetPlaced }: { match: Match; onBetPlaced?: () => void }) {
   const { isConnected } = useAccount()
   const { placeBet, step, error } = useApproveAndBet()
 
@@ -24,6 +24,7 @@ export function BetPanel({ match }: { match: Match }) {
     control,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<BetFormValues>({
     resolver: zodResolver(betSchema),
@@ -33,18 +34,76 @@ export function BetPanel({ match }: { match: Match }) {
   const selectedTeamId = watch('teamId')
   const isSubmitting = step !== 'idle' && step !== 'done' && step !== 'error'
 
+  useEffect(() => {
+    if (step === 'done') {
+      onBetPlaced?.()
+      reset()
+    }
+  }, [step, onBetPlaced, reset])
+
   const onSubmit = async (values: BetFormValues) => {
     const team = values.teamId === match.teamA.id ? 0 : 1
-    // matchId : pour l'instant on caste l'id string mocké en bigint arbitraire
-    // à remplacer par le vrai id numérique on-chain une fois le back branché
     await placeBet(BigInt(1), team, values.amount.toString())
   }
 
-  // ... reste du JSX identique, mais le bouton devient :
-
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="clip-corner bg-surface p-4 sm:p-5">
-      {/* ... champs équipe + montant identiques ... */}
+      <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-text-muted">
+        Placer une mise
+      </h2>
+
+      <Controller
+        name="teamId"
+        control={control}
+        render={({ field }) => (
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            <TeamOption
+              label={match.teamA.name}
+              logoUrl={match.teamA.logoUrl}
+              color="ct"
+              selected={field.value === match.teamA.id}
+              onClick={() => field.onChange(match.teamA.id)}
+            />
+            <TeamOption
+              label={match.teamB.name}
+              logoUrl={match.teamB.logoUrl}
+              color="t"
+              selected={field.value === match.teamB.id}
+              onClick={() => field.onChange(match.teamB.id)}
+            />
+          </div>
+        )}
+      />
+      {errors.teamId && <p className="mt-1.5 font-mono text-xs text-t">{errors.teamId.message}</p>}
+
+      <div className="mt-4">
+        <label htmlFor="amount" className="font-mono text-xs uppercase tracking-wider text-text-muted">
+          Montant (USDC)
+        </label>
+        <Controller
+          name="amount"
+          control={control}
+          render={({ field }) => (
+            <input
+              {...field}
+              id="amount"
+              type="number"
+              inputMode="decimal"
+              placeholder="0"
+              onChange={(e) => field.onChange(e.target.value === '' ? undefined : Number(e.target.value))}
+              value={field.value ?? ''}
+              className="mt-1.5 w-full border border-elevated bg-void px-3 py-2.5 font-mono text-lg text-text-primary outline-none focus:border-ct"
+            />
+          )}
+        />
+        {errors.amount && <p className="mt-1.5 font-mono text-xs text-t">{errors.amount.message}</p>}
+      </div>
+
+      {selectedTeamId && (
+        <p className="mt-3 font-mono text-xs text-text-muted">
+          Gain potentiel estimé : calcul basé sur le pool final au moment de la résolution.
+        </p>
+      )}
 
       {error && <p className="mt-3 font-mono text-xs text-t">{error}</p>}
 
@@ -58,17 +117,17 @@ export function BetPanel({ match }: { match: Match }) {
           disabled={isSubmitting}
           className="clip-corner-sm mt-4 w-full bg-ct py-3 font-display text-sm font-semibold uppercase tracking-wider text-void transition-opacity hover:opacity-90 disabled:opacity-50"
         >
-          {step === 'approving' && 'Confirme l\'approbation…'}
+          {step === 'approving' && "Confirme l'approbation…"}
           {step === 'waiting-approval' && 'Approbation en cours…'}
           {step === 'betting' && 'Confirme la mise…'}
           {step === 'waiting-bet' && 'Mise en cours…'}
-          {step === 'done' && 'Mise confirmée ✓'}
           {(step === 'idle' || step === 'error') && 'Confirmer la mise'}
         </button>
       )}
     </form>
   )
 }
+
 function TeamOption({
   label,
   logoUrl,
