@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum MatchStatus {
+  UPCOMING
+  LIVE
+  FINISHED
+}
+
+model Tournament {
+  id        String   @id @default(cuid())
+  name      String
+  imageUrl  String
+  startDate DateTime
+  endDate   DateTime
+  matches   Match[]
+  createdAt DateTime @default(now())
+}
+
+model Match {
+  id              String      @id @default(cuid())
+  onChainMatchId  BigInt      @unique // l'id numérique utilisé dans le smart contract
+  tournamentId    String
+  tournament      Tournament  @relation(fields: [tournamentId], references: [id])
+
+  hltvMatchId     String      @unique // id du match côté HLTV, pour matcher le fetch
+  teamAName       String
+  teamALogoUrl    String
+  teamBName       String
+  teamBLogoUrl    String
+
+  status          MatchStatus @default(UPCOMING)
+  scheduledAt     DateTime
+  winnerTeam      String?     // "A" ou "B" une fois résolu
+
+  lockedAt        DateTime?
+  resolvedAt      DateTime?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
