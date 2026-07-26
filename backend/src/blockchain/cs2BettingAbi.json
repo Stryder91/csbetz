@@ -1,0 +1,442 @@
+[
+    {
+        "type": "constructor",
+        "inputs": [
+            {
+                "name": "_bettingToken",
+                "type": "address",
+                "internalType": "address"
+            },
+            {
+                "name": "_owner",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "bettingToken",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "contract IERC20"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "claimWinnings",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "getMatchPools",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "poolA",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "poolB",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "status",
+                "type": "uint8",
+                "internalType": "enum CS2Betting.Status"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "getUserBet",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "user",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "betOnA",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "betOnB",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "hasClaimed",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "user",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [
+            {
+                "name": "",
+                "type": "bool",
+                "internalType": "bool"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "lockMatch",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "owner",
+        "inputs": [],
+        "outputs": [
+            {
+                "name": "",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "stateMutability": "view"
+    },
+    {
+        "type": "function",
+        "name": "placeBet",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "team",
+                "type": "uint8",
+                "internalType": "enum CS2Betting.Team"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "internalType": "uint256"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "renounceOwnership",
+        "inputs": [],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "resolveMatch",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "winner",
+                "type": "uint8",
+                "internalType": "enum CS2Betting.Team"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "transferOwnership",
+        "inputs": [
+            {
+                "name": "newOwner",
+                "type": "address",
+                "internalType": "address"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "function",
+        "name": "withdrawBet",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "internalType": "uint256"
+            },
+            {
+                "name": "team",
+                "type": "uint8",
+                "internalType": "enum CS2Betting.Team"
+            }
+        ],
+        "outputs": [],
+        "stateMutability": "nonpayable"
+    },
+    {
+        "type": "event",
+        "name": "BetPlaced",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "user",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "team",
+                "type": "uint8",
+                "indexed": false,
+                "internalType": "enum CS2Betting.Team"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "BetWithdrawn",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "user",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "team",
+                "type": "uint8",
+                "indexed": false,
+                "internalType": "enum CS2Betting.Team"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "MatchLocked",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "MatchResolved",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "winner",
+                "type": "uint8",
+                "indexed": false,
+                "internalType": "enum CS2Betting.Team"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "OwnershipTransferred",
+        "inputs": [
+            {
+                "name": "previousOwner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "newOwner",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "event",
+        "name": "WinningsClaimed",
+        "inputs": [
+            {
+                "name": "matchId",
+                "type": "uint256",
+                "indexed": true,
+                "internalType": "uint256"
+            },
+            {
+                "name": "user",
+                "type": "address",
+                "indexed": true,
+                "internalType": "address"
+            },
+            {
+                "name": "amount",
+                "type": "uint256",
+                "indexed": false,
+                "internalType": "uint256"
+            }
+        ],
+        "anonymous": false
+    },
+    {
+        "type": "error",
+        "name": "AlreadyClaimed",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "DidNotBetOnWinningTeam",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "MatchNotLocked",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "MatchNotOpen",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "MatchNotResolved",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "NothingToWithdraw",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "OwnableInvalidOwner",
+        "inputs": [
+            {
+                "name": "owner",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "OwnableUnauthorizedAccount",
+        "inputs": [
+            {
+                "name": "account",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "ReentrancyGuardReentrantCall",
+        "inputs": []
+    },
+    {
+        "type": "error",
+        "name": "SafeERC20FailedOperation",
+        "inputs": [
+            {
+                "name": "token",
+                "type": "address",
+                "internalType": "address"
+            }
+        ]
+    },
+    {
+        "type": "error",
+        "name": "ZeroAmount",
+        "inputs": []
+    }
+]
