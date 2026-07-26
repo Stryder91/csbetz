@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { MatchesModule } from './matches/matches.module';
 import { BlockchainModule } from './blockchain/blockchain.module';
+import { OracleModule } from './oracle/oracle.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [PrismaModule, MatchesModule, BlockchainModule],
+  imports: [ScheduleModule.forRoot(), PrismaModule, MatchesModule, BlockchainModule, OracleModule],
   controllers: [AppController],
   providers: [AppService],
 })
